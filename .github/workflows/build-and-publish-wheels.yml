@@ -48,42 +48,6 @@ jobs:
           name: herokulls-python-${{ matrix.python-version }}-amd64-${{ github.run_id }}-${{ env.timestamp }}
           path: dist/*.whl
 
-  herokulin-build-termux:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        python-version: [ '3.8', '3.9', '3.10', '3.11', '3.12' ]
-    steps:
-      - name: Get Branch Name
-        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-      - name: Checkout ${{ env.branch }}
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ env.branch }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          install: true
-      - name: Enable multi-arch support
-        run: |
-          echo '{"experimental": true}' | sudo tee /etc/docker/daemon.json > /dev/null
-          sudo systemctl restart docker
-      - name: Build Docker Image (termux)
-        run: |
-          docker buildx build --load --build-arg pname=linux_aarch64 --build-arg dname=arm64v8 --build-arg python_version="${{ matrix.python-version }}" --platform linux/arm64/v8 -t herokulls_p"${{ matrix.python-version }}":arm64v8 . -f platforms/linux/Dockerfile
-      - name: Run Docker Container (termux)
-        run: |
-          docker run --platform linux/arm64/v8 -v "$PWD":/usr/src/mnt herokulls_p"${{ matrix.python-version }}":arm64v8 ./linux_mount.sh
-      - name: Get Timestamp
-        run: echo "timestamp=$(date +%s)" >> $GITHUB_ENV
-      - name: Upload artifact (Termux)
-        uses: actions/upload-artifact@v4
-        with:
-          name: herokulls-python-${{ matrix.python-version }}-arm64v8-${{ github.run_id }}-${{ env.timestamp }}
-          path: dist/*.whl
-
   herokulin-build-arm64v8:
     runs-on: ubuntu-20.04
     strategy:
@@ -156,7 +120,7 @@ jobs:
 
   herokulls-publish:
     runs-on: ubuntu-latest
-    needs: [herokuwin-build, herokulin-build-arm64v8, herokulin-build-termux, herokulin-build-amd64]
+    needs: [herokuwin-build, herokulin-build-arm64v8, herokulin-build-amd64]
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
