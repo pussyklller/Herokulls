@@ -122,7 +122,7 @@ setup(
     version='0.1.11',
     long_description=readme,
     long_description_content_type='text/markdown',
-    url='https://github.com/pussykiller/herokulls',
+    url='https://github.com/pussykillerherokulls',
     author='Frost_Shard',
     license='LGPL-3.0',
     license_file='LICENSE',
