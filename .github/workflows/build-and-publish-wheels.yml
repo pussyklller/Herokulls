@@ -88,7 +88,7 @@ jobs:
           path: dist/*.whl
   
   herokuwin-build:
-    runs-on: windows-2019
+    runs-on: windows-latest
     strategy:
       matrix:
         python-version: [ '3.8', '3.9', '3.10', '3.11', '3.12' ]
