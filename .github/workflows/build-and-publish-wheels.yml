@@ -17,6 +17,9 @@ on:
       - '.github/*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   herokulin-build-amd64:
     runs-on: ubuntu-latest
