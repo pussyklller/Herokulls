@@ -157,7 +157,6 @@ jobs:
     - name: Upload Release Assets
       uses: softprops/action-gh-release@v2.2.0
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/
-        asset_name: $(basename $file)
-        asset_content_type: application/octet-stream
+        tag_name: v1.0.0
+        token: ${{ secrets.GITHUB_TOKEN }}
+        files: ./dist/*
